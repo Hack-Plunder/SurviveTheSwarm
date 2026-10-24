@@ -12,20 +12,21 @@ public class KeyboardInputReader : IInputReader
     {
         var keyboard = Keyboard.GetState();
 
-        MoveDirection = Vector2.Zero;
+        var direction = Vector2.Zero;
 
         if (keyboard.IsKeyDown(Keys.W) || keyboard.IsKeyDown(Keys.Up))
-            MoveDirection.Y = -1;
+            direction.Y = -1;
 
         if (keyboard.IsKeyDown(Keys.S) || keyboard.IsKeyDown(Keys.Down))
-            MoveDirection.Y = 1;
+            direction.Y = 1;
 
         if (keyboard.IsKeyDown(Keys.A) || keyboard.IsKeyDown(Keys.Left))
-            MoveDirection.X = -1;
+            direction.X = -1;
 
         if (keyboard.IsKeyDown(Keys.D) || keyboard.IsKeyDown(Keys.Right))
-            MoveDirection.X = 1;
+            direction.X = 1;
 
+        MoveDirection = direction;
         IsFiring = keyboard.IsKeyDown(Keys.Space);
     }
 }

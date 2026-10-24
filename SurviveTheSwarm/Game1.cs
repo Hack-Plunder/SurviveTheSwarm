@@ -8,6 +8,7 @@ public class Game1 : Game
 {
     private readonly GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch = null!;
+    private SpriteFont _hudFont = null!;
     private readonly IInputReader _inputReader;
     private readonly IProjectileFactory _projectileFactory;
     private readonly IEnemyFactory _enemyFactory;
@@ -43,6 +44,7 @@ public class Game1 : Game
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
         ShapeRenderer.Initialize(GraphicsDevice);
+        _hudFont = Content.Load<SpriteFont>("HudFont");
 
         _scoreSystem = new ScoreSystem();
         _gameStateManager = new GameStateManager();
@@ -56,7 +58,7 @@ public class Game1 : Game
 
         _enemySpawner = new EnemySpawner(_enemyFactory, 1.2f);
         _collisionSystem = new CollisionSystem();
-        _hud = new Hud(_player, _scoreSystem, _gameStateManager);
+        _hud = new Hud(_player, _scoreSystem, _gameStateManager, _hudFont);
     }
 
     protected override void Update(GameTime gameTime)
@@ -78,6 +80,7 @@ public class Game1 : Game
             return;
         }
 
+        _inputReader.Update();
         _player.Update(deltaTime);
         _enemySpawner.Update(deltaTime, _player.Position);
 
@@ -103,12 +106,6 @@ public class Game1 : Game
         _enemySpawner.Draw(_spriteBatch);
         _hud.Draw(_spriteBatch);
 
-        if (_gameStateManager.IsGameOver)
-        {
-            ShapeRenderer.DrawRectangle(_spriteBatch, new Rectangle(250, 250, 780, 220), Color.Black);
-            ShapeRenderer.DrawRectangle(_spriteBatch, new Rectangle(320, 320, 620, 60), Color.Red);
-        }
-
         _spriteBatch.End();
 
         base.Draw(gameTime);
@@ -128,6 +125,6 @@ public class Game1 : Game
 
         _enemySpawner = new EnemySpawner(_enemyFactory, 1.2f);
         _collisionSystem = new CollisionSystem();
-        _hud = new Hud(_player, _scoreSystem, _gameStateManager);
+        _hud = new Hud(_player, _scoreSystem, _gameStateManager, _hudFont);
     }
 }
